@@ -1,0 +1,133 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Guardar en DB</title>
+	<link rel="stylesheet" href="../css/bootstrap.css">
+	<script src="../js/jquery-3.1.1.js"></script>
+	<style>
+	.vistaN {
+		width:50px;
+		height:30px;
+		border-radius:5px;
+	}
+	.contenido{
+		margin:auto;
+		margin-top:20px;
+	}
+	.input-color {
+		width: 70px;
+		height:33px;
+		border-radius:5px;
+		border:3px;
+		vertical-align:bottom;
+	}
+	.input-texto{
+		float:right;
+		width:65%;
+	}
+	.table {
+		border-bottom:2px;
+		border-bottom-style:solid;
+		border-bottom-color: dodgerblue;
+	}
+	.titulo{
+		margin-left:20px;
+	}
+	.C1 {
+		font-size: 28px;
+		color:Crimson;
+	}
+
+	.C2 {
+		font-size: 28px;
+		color:LightCoral;
+	}
+	@media screen and (max-width:900px){
+		.input-texto{
+			float:unset;
+			margin-top:4px;
+			width:100%;
+		}
+		.formulario {
+			text-align:center;
+		}
+	}
+	</style>
+</head>
+<body>
+	<div class="titulo">
+		<small class="C1">C</small><small class="C2">O</small><small class="C1">LOR</small><small class="C2">S</small>
+	</div>
+		<div class="col-md-12">
+			<div class="list-group">
+				<div class="list-group-item"> 
+					<div class="row-adction-primary"> 
+						<h4 class="list-group-item-heading"></span> Colores </h4>
+					</div>
+					<form method="get" id="formulario" class="formulario" action="index.php">
+						<button class="btn btn-default"  type="submit">Guardar</button>
+						<input name="valor" id="valor" type="color" class="input-color">
+						<input name="texto" id="texto" class="form-control input-texto" type="text">
+					</form>
+				</div>
+			</div>
+<script async src="https://snack.expo.io/embed.js"></script>
+			<table id="Tabla" class="table table-striped">
+					<tr>
+						<th>dato DB</th>
+						<th>Vista</th>
+						<th>Eliminar</th>
+					</tr>
+			</table>
+			<div class="div-paginacion text-center">
+				<ul class="pagination">
+				  <li class="active"><a href="#">1</a></li>
+				  <li><a href="#">2</a></li>
+				  <li><a href="#">3</a></li>
+				  <li><a href="#">4</a></li>
+				  <li><a href="#">5</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+<script>
+	//========================Traer Datos con con $.eacgh====================//
+	
+	$(document).ready(function(){
+	//Almacenar el contenido del json en data
+		$.getJSON("http://localhost/Practicas/PHP/Guardar-articulos-en-DB/2/verColores.php",function(data){
+			var employee_data='';
+			//Pasar variable contenedora del Json, y una funcion que tendra como parametros la posicion key y el valor value
+			$.each(data,function(key, value){
+				employee_data += '<tr>';
+				employee_data += '<td>'+value.texto+'</td>';
+				employee_data += '<td><div class="vistaN" style="background:'+value.valor+'"></div></td>';
+				employee_data += '<td><form action="index.php"><input type="hidden" value="'+value.id+'" name="Eliminar"><button class="btn btn-danger" ">Eliminar</button></form></td>';
+				employee_data += '/tr>';
+			});
+			$('#Tabla').append(employee_data);
+		});
+	});
+	
+	/*===============================================Traer Datos con ciclo for
+	
+	$(document).ready(function(){
+	//Almacenar el contenido del json en data
+		$.getJSON("http://localhost/Practicas/PHP/Guardar-articulos-en-DB/2/verColores.php",function(data){
+			var employee_data='';
+			//Pasar variable contenedora del Json, y una funcion que tendra como parametros la posicion key y el valor value
+			for(i=0;i<data.length;i++){
+				employee_data += '<tr>';
+				employee_data += '<td>'+data[i].texto+'</td>';
+				employee_data += '<td><div class="vistaN" style="background:'+data[i].valor+'"></div></td>';
+				employee_data += '<td><form action="index.php"><input type="hidden" value="'+data[i].id+'" name="Eliminar"><button class="btn btn-danger" ">Eliminar</button></form></td>';
+				employee_data += '/tr>';
+			}
+			$('#Tabla').append(employee_data);
+		});
+	});
+	*/
+</script>
+</body>
+</html>

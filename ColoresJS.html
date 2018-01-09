@@ -1,0 +1,173 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Guardar en DB</title>
+	<link rel="stylesheet" href="../css/bootstrap.css">
+	<script src="../js/jquery-3.1.1.js"></script>
+</head>
+<style>
+	.contenido{
+		margin:auto;
+		margin-top:20px;
+	}
+	.input-color {
+		width: 70px;
+		height:33px;
+		border-radius:5px;
+		border-color: unset;
+		border:3px;
+		vertical-align:bottom;
+	}
+	.table {
+		border-bottom:2px;
+		border-bottom-style:solid;
+		border-bottom-color: dodgerblue;
+	}
+	
+	.vistaN {
+		width:50px;
+		height:30px;
+		border-radius:5px;
+		background: green;
+	}
+	.vista {
+		width:50px;
+		height:30px;
+		border-radius:5px;
+		background: dodgerblue;
+	}
+	
+	.vista2 {
+		width:50px;
+		height:30px;
+		border-radius:5px;
+		background: Maroon;
+	}
+	.vista3 {
+		width:50px;
+		height:30px;
+		border-radius:5px;
+		background: DarkMagenta;
+	}
+	.div-paginacion {
+		margin-bottom:0;
+	}
+</style>
+<body>
+	<div class="contenido">
+		<div class="col-md-12"> 
+			<div class="list-group">
+				<div class="list-group-item"> 
+					<div class="row-adction-primary"> 
+						<h4 class="list-group-item-heading"></span> Colores </h4>
+					</div>
+					<form id="formulario">
+						<input name="valor2" id="valor2" type="color" class="input-color">
+						<input name="texto2" id="texto2" class="form-control pull-right" style="width:65%" type="text">
+						<button class="btn btn-primary" type="button" onclick="guardarColores()">MostrarDatos</button>
+					</form>
+				</div>
+			</div>
+			<table id="Latabla" class="table table-striped">
+					<tr>
+						<th>dato DB</th>
+						<th>Vista</th>
+						<th>Eliminar DB</th>
+						<th>Eliminar</th>
+					</tr>
+					<tr>
+						<td>Azul</td>
+						<td><div class="vista"></div></td>
+						<td><button class="btn btn-primary"> EliminarDB</button></td>
+						<td><button class="btn btn-danger"> Eliminar</button></td>
+					</tr>
+					<tr>
+						<td>Rojo</td>
+						<td><div class="vista2"></div></td>
+						<td><button class="btn btn-primary"> EliminarDB</button></td>
+						<td><button class="btn btn-danger"> Eliminar</button></td>
+					</tr>
+					<tr>
+						<td>PLD</td>
+						<td><div class="vista3"></div></td>
+						<td><button class="btn btn-primary"> EliminarDB</button></td>
+						<td><button class="btn btn-danger"> Eliminar</button></td>
+					</tr>
+					<tbody id="ContenidoTabla"></tbody>
+			</table>
+			<div class="div-paginacion text-center">
+				<ul class="pagination">
+				  <li class="active"><a href="#">1</a></li>
+				  <li><a href="#">2</a></li>
+				  <li><a href="#">3</a></li>
+				  <li><a href="#">4</a></li>
+				  <li><a href="#">5</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<script>
+		var elementos =[];
+		function guardarColores(){
+			nombre = document.getElementById("valor2").value;
+			var InputsAlmacenados={
+				"texto":$("#texto2").val(),
+				"color":"<div class='vistaN' style='background:"+nombre+"' ></div>"
+			};
+			elementos.push(InputsAlmacenados);
+			document.getElementById('ContenidoTabla').innerHTML = elementos;
+			mostrarDatos();
+		}
+		
+		function mostrarDatos(){
+			DestinoDatos = document.getElementById('ContenidoTabla');
+			DestinoDatos.innerHTML ='';
+			for(x=0;x<elementos.length;x++){
+				InputsAlmacenados = elementos[x];
+				tr= document.createElement("tr");
+				for(key in InputsAlmacenados){
+					propiedad= InputsAlmacenados[key];
+					td = document.createElement("td");
+					td.innerHTML = propiedad;
+					tr.appendChild(td);
+				}
+				td= document.createElement("td");
+				boton = document.createElement("a");
+				boton.innerHTML="EliminarDB";
+				boton.setAttribute("class","btn btn-primary");
+				td.appendChild(boton);
+				tr.appendChild(td);
+				
+				td= document.createElement("td");
+				boton = document.createElement("button");
+				boton.innerHTML="Eliminar";
+				boton.setAttribute("class","btn btn-danger");
+				boton.setAttribute("type","button");
+				boton.setAttribute("id",x);
+				boton.setAttribute("name",x);
+				boton.setAttribute("onclick","EditarColumna(nombre)");
+				td.appendChild(boton);
+				tr.appendChild(td);
+				DestinoDatos.appendChild(tr);
+			}
+		}
+		function EditarColumna(index){
+				elementos.splice(index,1);
+				mostrarDatos();
+		}
+		
+		function cargar(){
+				$.ajax({
+					type:"get",
+					url:"verColores.php"										
+				}).done(function(info){
+					for(x=0;x<info.length;x++){
+						document.getElementById('JSON').innerHTML = info[x].texto;
+						elementos.push(info[x].texto);
+					}
+				});
+			}
+	</script>
+</body>
+</html>
